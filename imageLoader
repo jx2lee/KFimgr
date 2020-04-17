@@ -1,6 +1,16 @@
 #!/bin/bash
-# Mon, 30.03.2020
+# Fri, 17.04.2020
+# jaejun.lee.1991@gmail.com
+
 registry=
+
+function check_env() {
+  if [ $(docker images | awk '{print $2}' | grep "<none>" | wc -l) -ne 0 ];then
+    echo "You should delete image having <none> tag! exists $(docker images | awk '{print $2}' | grep "<none>" | wc -l) <none> tag image.."
+    exit 1
+  fi
+
+}
 
 function pull_images() {
 
@@ -65,6 +75,7 @@ function main() {
     pull_images
     ;;
   push)
+    check_env
     push_images
     ;;
   *)
