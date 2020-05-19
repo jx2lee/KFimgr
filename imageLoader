@@ -83,7 +83,7 @@ function main() {
     set +x
     echo "usage:" >&2
     echo "    $0 pull" >&2
-    echo "    $0 push {registry_endpoint}" >&2
+    echo "    $0 push" >&2
     ;;
   esac
 }
