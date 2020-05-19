@@ -1,4 +1,4 @@
-# Kubeflow Image Loader
+# Kubeflow Image Loader Using Shell Script
 
 This repo is for to pull/push docker image to registry based on Kubeflow.
 
