@@ -1,5 +1,5 @@
 #!/bin/bash
-# Fri, 17.04.2020
+# Fri, 18.05.2020
 # jaejun.lee.1991@gmail.com
 
 registry=
@@ -35,7 +35,7 @@ function pull_images() {
       imageId=$(docker images | grep $name | awk '{print $3}')
       echo "[ IMAGE-ID] $imageId" | grep "IMAGE_ID" --color
       docker tag $imageId ${name}:${version}
-      docker save $repo > "./tars/${repo##*/}.tar"
+      docker save ${name}:${version} > "./tars/${repo##*/}.tar"
       docker rmi -f $imageId
   done
 
@@ -61,8 +61,8 @@ function push_images() {
     version=${repo##*:}
     echo "[PUSH IMAGE] $repo" | grep "PUSH IMAGE" --color
     docker load < "./tars/${repo##*/}.tar"
-    imageId=$(docker images | grep "<none>" | awk '{print $3}')
-    docker tag ${imageId} ${registry}/${name}:${version}
+    imageId=$(docker images | grep $name | awk '{print $3}')
+    docker tag ${name}:${version} ${registry}/${name}:${version}
     docker push ${registry}/${name}:${version}
     docker rmi -f ${imageId}
 done
@@ -72,6 +72,7 @@ done
 function main() {
   case "${1:-}" in
   pull)
+    check_env
     pull_images
     ;;
   push)
