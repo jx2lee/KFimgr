@@ -86,8 +86,6 @@ Use the pull option to convert the image needed for kubeflow installation into a
 
 The push option pushes the image tar file in the `tars` folder to a specific docker registry. Before execution, the address must be added to the `registry` variable in the imageLoader script. For example:  
 ```bash
-...
-...
 #!/bin/bash
 # Fri, 18.05.2020
 # jaejun.lee.1991@gmail.com
