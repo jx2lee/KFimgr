@@ -96,6 +96,9 @@ registry={registry_ip}:{registry_port}
 
 function check_env() {
   if [ $(docker images | awk '{print $2}' | grep "<none>" | wc -l) -ne 0 ];then
+
+...
+...
 ```
 
 ---
