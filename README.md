@@ -92,9 +92,6 @@ The push option pushes the image tar file in the `tars` folder to a specific doc
 
 registry={registry_ip}:{registry_port}
 
-function check_env() {
-  if [ $(docker images | awk '{print $2}' | grep "<none>" | wc -l) -ne 0 ];then
-
 ...
 ...
 ```
