@@ -1,10 +1,2 @@
-!tars/.keep
 **/.DS_Store
-
-# except binary
-**/images/
-**/kfctl
 **/kubeflow_resources
-**/my-kubeflow/
-**/trouble-shoot/
-**/v0.7-branch.tar.gz
