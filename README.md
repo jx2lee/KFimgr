@@ -8,6 +8,7 @@ This repo is for to pull/push docker image to registry based on Kubeflow.
 Before Using Loader, Docker must be pre-installed. And Image capacity takes about 30G. Look at Image list needed for Kubeflow installation *(version: 0.7.1)*
 
 ```
+argoproj/argoexec:v2.3.0
 argoproj/argoui:v2.3.0
 argoproj/workflow-controller:v2.3.0
 docker.io/istio/citadel:1.1.6
