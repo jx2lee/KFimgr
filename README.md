@@ -1,11 +1,11 @@
 # Kubeflow Image Loader Using Shell Script
 
-This repo is for to pull/push docker image to registry based on Kubeflow.
+This repo is for to pull/push docker image to private registry for Kubeflow.
 
 ## Usage
 
 **Preperation**:  
-Before Using Loader, Docker must be pre-installed. And Image capacity takes about 30G. Look at Image list needed for Kubeflow installation *(version: 0.7.1)*
+Before Using Loader, Docker must be pre-installed. And Image capacity takes about 58G. Look at Image list needed for Kubeflow installation *(version: 0.7.1)*
 
 ```
 argoproj/argoexec:v2.3.0
@@ -97,20 +97,16 @@ usage:
 
 ### pull
 
-Use the pull option to convert the image needed for kubeflow installation into a tar file. At this time, the tar file is created in the `tars /` folder and occupies about 30G. `.imageList` and` .imageListHash` contain lists with or without image tags.
+Use the pull option to convert the image needed for kubeflow installation into a tar file. At this time, the tar file is created in `archive` folder and occupies about 58G. `.imageList` and` .imageListHash` contain lists with or without image tags(without image->hash).  
 
 ### push
 
-The push option pushes the image tar file in the `tars` folder to a specific docker registry. Before execution, the address must be added to the `registry` variable in the imageLoader script. For example:  
+This option pushes the image tar file in the `archive` folder to private docker registry. Before execution, the address must be added to `loader.config`. For example:  
 ```bash
-#!/bin/bash
-# Fri, 18.05.2020
-# jaejun.lee.1991@gmail.com
+#{ip}:{port}
+#example) docker_registry=192.168.179.189:5000
 
-registry={registry_ip}:{registry_port}
-
-...
-...
+docker_registry=
 ```
 
 ---

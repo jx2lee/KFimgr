@@ -1,11 +1,12 @@
 #!/bin/bash
-# Fri, 24.06.2020
+# Fri, 10.07.2020
 # jaejun.lee.1991@gmail.com
 
-registry=
 loader_dir=$(pwd -P)
+. ${loader_dir}/loader.config
 
 function check_env() {
+
   if [ $(docker images | awk '{print $2}' | grep "<none>" | wc -l) -ne 0 ];then
     echo "[ERROR] You should delete image having <none> tag! exists $(docker images | awk '{print $2}' | grep "<none>" | wc -l) <none> tag image.."
     exit 1
@@ -13,9 +14,21 @@ function check_env() {
 
 }
 
+function check_registry() {
+
+  if [[ -z ${docker_registry} ]]; then
+    echo "[ERROR] You must set docker_registry in loader.config file!"
+    exit 1
+  else
+    echo "[INFO] Set docker_registry: $docker_registry"
+  fi
+
+}
+
 function pull_images() {
+
   mkdir -p ${loader_dir}/archive
-  image_list=.imageList
+  image_list=${loader_dir}/.imageList
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
       name=${repo%:*}
@@ -26,15 +39,15 @@ function pull_images() {
       docker rmi -f $repo
   done
 
-  image_list=.imageListHash
+  image_list=${loader_dir}/.imageListHash
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
       name=${repo%@sha256:*}
       version=${repo##*:}
       echo "[ REPO ] $repo" | grep "REPO" --color
-      docker pull $repo
-      imageId=$(docker images | grep $name | awk '{print $3}')
-      echo "[ IMAGE-ID] $imageId" | grep "IMAGE_ID" --color
+      docker pull $repo && sleep 5s
+      imageId=$(docker images | grep "<none>" | awk '{print $3}')
+      echo "[ IMAGE-ID ] $imageId" | grep "IMAGE_ID" --color
       docker tag $imageId ${name}:${version}
       docker save ${name}:${version} > "${loader_dir}/archive/${repo##*/}.tar"
       docker rmi -f $imageId
@@ -44,33 +57,33 @@ function pull_images() {
 
 function push_images() {
 
-  image_list=.imageList
+  image_list=${loader_dir}/.imageList
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
       echo "[PUSH IMAGE] $repo" | grep "PUSH IMAGE" --color
       image_name=${repo##*/}
       docker load < "${loader_dir}/archive/${image_name/%:/_}.tar"
-      docker tag ${repo} ${registry}/${repo}
-      docker push ${registry}/${repo}
-      docker rmi -f ${repo} && docker rmi -f ${registry}/${repo}
+      docker tag ${repo} ${docker_registry}/${repo}
+      docker push ${docker_registry}/${repo}
+      docker rmi -f ${repo} ${docker_registry}/${repo}
   done
 
-  image_list=.imageListHash
+  image_list=${loader_dir}/.imageListHash
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
     name=${repo%@sha256:*}
     version=${repo##*:}
     echo "[PUSH IMAGE] $repo" | grep "PUSH IMAGE" --color
     docker load < "${loader_dir}/archive/${repo##*/}.tar"
-    imageId=$(docker images | grep $name | awk '{print $3}')
-    docker tag ${name}:${version} ${registry}/${name}:${version}
-    docker push ${registry}/${name}:${version}
-    docker rmi -f ${imageId}
+    docker tag ${name}:${version} ${docker_registry}/${name}:${version}
+    docker push ${docker_registry}/${name}:${version}
+    docker rmi -f ${name}:${version} ${docker_registry}/${name}:${version}
 done
 
 }
 
 function main() {
+
   case "${1:-}" in
   pull)
     check_env
@@ -78,6 +91,7 @@ function main() {
     ;;
   push)
     check_env
+    check_registry
     push_images
     ;;
   *)
