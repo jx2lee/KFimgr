@@ -1,5 +1,5 @@
 #!/bin/bash
-# Fri, 10.07.2020
+# Fri, 04.09.2020
 # jaejun.lee.1991@gmail.com
 
 loader_dir=$(pwd -P)
@@ -28,7 +28,7 @@ function check_registry() {
 function pull_images() {
 
   mkdir -p ${loader_dir}/archive
-  image_list=${loader_dir}/.imageList
+  image_list=${loader_dir}/v${kf_version}/.imageList
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
       name=${repo%:*}
@@ -39,7 +39,7 @@ function pull_images() {
       docker rmi -f $repo
   done
 
-  image_list=${loader_dir}/.imageListHash
+  image_list=${loader_dir}/v${kf_version}/.imageListHash
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
       name=${repo%@sha256:*}
@@ -57,7 +57,7 @@ function pull_images() {
 
 function push_images() {
 
-  image_list=${loader_dir}/.imageList
+  image_list=${loader_dir}/v${kf_version}/.imageList
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
       echo "[PUSH IMAGE] $repo" | grep "PUSH IMAGE" --color
@@ -68,7 +68,7 @@ function push_images() {
       docker rmi -f ${repo} ${docker_registry}/${repo}
   done
 
-  image_list=${loader_dir}/.imageListHash
+  image_list=${loader_dir}/v${kf_version}/.imageListHash
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
     name=${repo%@sha256:*}
