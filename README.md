@@ -1,6 +1,6 @@
-# Kubeflow Image Loader Using Shell Script
+# KFimgr
 
-This repo is for to pull/push docker image to private registry for Kubeflow.
+This repo is for to pull or push docker image to private registry for Kubeflow.
 
 ## Usage
 
@@ -29,6 +29,8 @@ This option pushes the image tar file in the `archive` folder to private docker 
 
 docker_registry=
 ```
+
+> If want to install Kubeflow version 0.7.0, Replace .imageList and .imageListHash to 
 
 ---
 
