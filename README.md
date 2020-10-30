@@ -9,7 +9,7 @@ Before Using Loader, Docker must be pre-installed. And Image capacity takes abou
 ```bash
 # Set KF Version & docker private registry
 # example)
-# kf_version=0.7.1
+# kf_version=0.7.1 (0.7.1, 0.7.2, 1.0.2)
 # docker_registry=192.168.179.185:5000
 kf_version={install_version}
 docker_registry={your_private_docker_registry_to_put_images}

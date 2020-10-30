@@ -1,9 +1,9 @@
 #!/bin/bash
-# Fri, 04.09.2020
+# Fri, 30.10.2020
 # jaejun.lee.1991@gmail.com
 
 loader_dir=$(pwd -P)
-. ${loader_dir}/loader.config
+. ${loader_dir}/kfimgr.config
 
 function check_env() {
 
@@ -39,6 +39,11 @@ function pull_images() {
       docker rmi -f $repo
   done
 
+  if [[ ${kf_version} == "1.0.2" ]]; then
+      echo "[INFO] Kubeflow v${kf_version} pull image finished"
+      exit 0
+  fi
+
   image_list=${loader_dir}/v${kf_version}/.imageListHash
   repo_list=$(awk '{print $1}' ${image_list})
   for repo in $repo_list;do
@@ -67,6 +72,11 @@ function push_images() {
       docker push ${docker_registry}/${repo}
       docker rmi -f ${repo} ${docker_registry}/${repo}
   done
+
+  if [[ ${kf_version} == "1.0.2" ]]; then
+      echo "[INFO] Kubeflow v${kf_version} push image finished"
+      exit 0
+  fi
 
   image_list=${loader_dir}/v${kf_version}/.imageListHash
   repo_list=$(awk '{print $1}' ${image_list})
